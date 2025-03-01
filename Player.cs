@@ -1,46 +1,42 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
+ 
 public class Player : MonoBehaviour
 {
-    //Здоровье игрока
-    private int health = 10;
-
-    //Число собранных монет
-    private int coins;
-
-    //Префаб огненного шара и параметр Transform точки атаки
-    public GameObject fireballPrefab;
-    public Transform attackPoint;
-
-
-    //Метод, понижающий здоровье игрока
-    public void TakeDamage(int damage)
+    public static List<Square> squares;
+ 
+    public static int score = 0;
+ 
+    void Awake()
     {
-        health -= damage;
-        print("Здоровье игрока: " + health);
+        squares = new List<Square>();
     }
-
-    //Метод, увеличивающий число монеток
-    public void CollectCoins()
-    {
-        coins++;
-        print("Собранные монетки: " + coins);
-    }
-
-
+ 
     void Update()
     {
-
-        //Если игрок кликает левой кнопкой мыши, то создаётся огненный шар
-        if (Input.GetMouseButtonDown(0))
+        if (squares.Count == 0)
         {
-            Instantiate(fireballPrefab, attackPoint.position, attackPoint.rotation);
+            Victory();
         }
-
     }
+ 
+    public static void Defeat()
+    {
+        score = 0;
+        UI.ShowDefeatPanel();
+    }
+ 
+    public static void Victory()
+    {
+        UI.ShowVictoryPanel();
+    }
+ 
+    public static void Restart()
+    {
+        int index = SceneManager.GetActiveScene().buildIndex;
+        SceneManager.LoadScene(index);
+    }
+ 
 }
-
-
-
